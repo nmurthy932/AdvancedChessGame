@@ -14,7 +14,7 @@ public class Piece {
 		return options;
 	}
 	
-	public static ArrayList<ArrayList<Integer>> getOptions(int x, int y, String state){
+	private static ArrayList<ArrayList<Integer>> getOptions(int x, int y, String state){
 		char piece = ChessBoard.getStatePiece(x, y, state);
 		ArrayList<ArrayList<Integer>> options;
 		switch(Character.toLowerCase(piece)) {

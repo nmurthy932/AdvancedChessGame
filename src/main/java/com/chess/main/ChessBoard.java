@@ -27,11 +27,17 @@ public class ChessBoard extends MouseAdapter{
 	public ArrayList<ArrayList<Integer>> options;
 	public boolean gameOver;
 	public boolean blackPOV;
+	public ChessAI chessAI;
 	
 	public ChessBoard() {
-		state = "rnbqkbnr/pppppppp/8/7Q/2B5/8/PPPPPPPP/RNB1K1NR w KQkq - 0 1";
+		state = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 		//original state: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
-		
+		new ChessBoard(state);
+	}
+
+	public ChessBoard(String state){
+		this.state = state;
+
 		squareNames.put('a', 0);
 		squareNames.put('b', 1);
 		squareNames.put('c', 2);
@@ -40,7 +46,7 @@ public class ChessBoard extends MouseAdapter{
 		squareNames.put('f', 5);
 		squareNames.put('g', 6);
 		squareNames.put('h', 7);
-		
+
 		pieceNames.put('R', "Rook");
 		pieceNames.put('N', "Knight");
 		pieceNames.put('B', "Bishop");
@@ -48,16 +54,14 @@ public class ChessBoard extends MouseAdapter{
 		pieceNames.put('Q', "Queen");
 		pieceNames.put('P', "Pawn");
 		selected = new int[] {-1, -1};
-		
+
 		options = new ArrayList<ArrayList<Integer>>();
-		
 		mouseover = true;
-		
 		gameOver = false;
-		
 		pastStates.add(state);
-		
 		blackPOV = false;
+
+		//chessAI = new ChessAI(this);
 	}
 	
 	
@@ -307,6 +311,17 @@ public class ChessBoard extends MouseAdapter{
 		String[] fullState = state.split(" ");
 		String newState = fullState[0]+" "+fullState[1]+" "+fullState[2]+" "+fullState[3]+" "+fullState[4]+" "+fullMoves;
 		setState(newState);
+	}
+
+	public static String getActivePieces(String state){
+		String[] pieceState = ChessBoard.getStatePieces(state).split("");
+		String pieces = "";
+		for(String s : pieceState){
+			if(s.matches("[a-zA-Z]]")){
+				pieces+=s;
+			}
+		}
+		return pieces;
 	}
 	
 	public static int[] stringPieceToCoords(String piece, Map<Character, Integer> squareNames) {
@@ -610,7 +625,22 @@ public class ChessBoard extends MouseAdapter{
 	 * GET LEGAL MOVES
 	 */
 	
-	
+	public static ArrayList<ArrayList<Integer>> getAllLegalMoves(String state, String color){
+		ArrayList<ArrayList<Integer>> everyMove = new ArrayList<ArrayList<Integer>>();
+		for(int i = 0; i<8; i++){
+			for(int x = 0; x<8; x++){
+				char piece = getStatePiece(x, i, state);
+				if(isPiece(x, i, state)) {
+					if ((color.equals("b") && Character.isLowerCase(piece)) || (color.equals("w") && Character.isUpperCase(getStatePiece(x, i, state)))) {
+						ArrayList<Integer> coords = new ArrayList<Integer>();
+						coords.add(x); coords.add(i);
+						everyMove.add(coords);
+					}
+				}
+			}
+		}
+		return everyMove;
+	}
 	
 	
 	/*

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Rook extends Piece{
 
+	public static final int value = 5;
 	public static ArrayList<ArrayList<Integer>> getMoves(char piece, int x, int y, String state){
 		ArrayList<ArrayList<Integer>> legalMoves = new ArrayList<ArrayList<Integer>>();
 		for(int i = x-1; i>=0; i--) {
