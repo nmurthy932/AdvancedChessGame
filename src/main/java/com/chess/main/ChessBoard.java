@@ -27,12 +27,11 @@ public class ChessBoard extends MouseAdapter{
 	public ArrayList<ArrayList<Integer>> options;
 	public boolean gameOver;
 	public boolean blackPOV;
-	public ChessAI chessAI;
+	//public ChessAI chessAI;
 	
 	public ChessBoard() {
-		state = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 		//original state: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
-		new ChessBoard(state);
+		this("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	}
 
 	public ChessBoard(String state){
