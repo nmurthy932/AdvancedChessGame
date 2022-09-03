@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class King extends Piece{
 
-	public static final int value = 900;
+	public static final int value = 9000;
 	public static ArrayList<ArrayList<Integer>> getMoves(char piece, int x, int y, String state){
 		ArrayList<ArrayList<Integer>> legalMoves = new ArrayList<ArrayList<Integer>>();
 		int xloc = x-1;

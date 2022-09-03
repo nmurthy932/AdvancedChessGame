@@ -23,8 +23,10 @@ public class ChessAI {
             for(ArrayList<Integer> optionCoords : options) {
                 ChessBoard board = new ChessBoard(state);
                 board.selected = new int[]{coords.get(0), coords.get(1)};
+                System.out.println(ChessBoard.getStatePiece(board.selected[0], board.selected[1], board.getState()));
                 board.makeMove(optionCoords.get(0), optionCoords.get(1));
-                int score = -negamax(board.getState(), depth - 1);
+                int score = negamax(board.getState(), depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE);
+                System.out.println(score);
                 if (score > max) {
                     max = score;
                     startingCoords.clear();
@@ -42,9 +44,9 @@ public class ChessAI {
         System.out.println(endingCoords.toString());
     }
 
-    public int negamax(String state, int depth){
+    public int negamax(String state, int depth, int b, int a){
         if(depth == 0 || board.gameOver){
-            return value(board);
+            return value(state);
         }
         int max = Integer.MIN_VALUE;
         ArrayList<ArrayList<Integer>> allMoves = ChessBoard.getAllLegalMoves(state, ChessBoard.getActiveColor(state));
@@ -54,17 +56,18 @@ public class ChessAI {
                 ChessBoard board = new ChessBoard(state);
                 board.selected = new int[]{coords.get(0), coords.get(1)};
                 board.makeMove(optionCoords.get(0), optionCoords.get(1));
-                int score = -negamax(board.getState(), depth - 1);
-                if (score > max) {
-                    max = score;
+                max = Math.max(max, -negamax(board.getState(), depth - 1, -b, -a));
+                a = Math.max(a, max);
+                if(a >= b){
+                    break;
                 }
             }
         }
         return max;
     }
 
-    private int value(ChessBoard board) {
-        String allPieces = ChessBoard.getActivePieces(board.getState());
+    private int value(String board) {
+        String allPieces = ChessBoard.getActivePieces(board);
         int materialScore = King.value*(numPieces(allPieces, "K"))
                 + Queen.value*(numPieces(allPieces, "Q"))
                 + Bishop.value*(numPieces(allPieces, "B"))
@@ -73,10 +76,10 @@ public class ChessAI {
                 + Pawn.value*(numPieces(allPieces, "P"));
         //Set mobility weight to whatever works best
         int mobilityWeight = 5;
-        String state = board.getState();
+        String state = board;
         int mobilityScore = mobilityWeight*(ChessBoard.getAllLegalMoves(state, "w").size() - ChessBoard.getAllLegalMoves(state, "b").size());
         int whoMoves;
-        if(ChessBoard.getActiveColor(board.getState()) == "w"){
+        if(ChessBoard.getActiveColor(board) == "w"){
             whoMoves = 1;
         }
         else{

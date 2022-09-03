@@ -27,11 +27,11 @@ public class ChessBoard extends MouseAdapter{
 	public ArrayList<ArrayList<Integer>> options;
 	public boolean gameOver;
 	public boolean blackPOV;
-	//public ChessAI chessAI;
+	public ChessAI chessAI;
 	
 	public ChessBoard() {
 		//original state: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
-		this("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+		this("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1");
 	}
 
 	public ChessBoard(String state){
@@ -60,7 +60,7 @@ public class ChessBoard extends MouseAdapter{
 		pastStates.add(state);
 		blackPOV = false;
 
-		//chessAI = new ChessAI(this);
+		chessAI = new ChessAI(this);
 	}
 	
 	
@@ -316,7 +316,7 @@ public class ChessBoard extends MouseAdapter{
 		String[] pieceState = ChessBoard.getStatePieces(state).split("");
 		String pieces = "";
 		for(String s : pieceState){
-			if(s.matches("[a-zA-Z]]")){
+			if(s.matches("^[a-zA-Z]*$")){
 				pieces+=s;
 			}
 		}
@@ -580,6 +580,7 @@ public class ChessBoard extends MouseAdapter{
 					else {
 						return;
 					}
+					chessAI.makeMove();
 				}
 				else {
 					clearBoard();
@@ -629,7 +630,7 @@ public class ChessBoard extends MouseAdapter{
 		for(int i = 0; i<8; i++){
 			for(int x = 0; x<8; x++){
 				char piece = getStatePiece(x, i, state);
-				if(isPiece(x, i, state)) {
+				if(isPiece(x, i, state) && Piece.getMoves(x, i, state).size() > 0) {
 					if ((color.equals("b") && Character.isLowerCase(piece)) || (color.equals("w") && Character.isUpperCase(getStatePiece(x, i, state)))) {
 						ArrayList<Integer> coords = new ArrayList<Integer>();
 						coords.add(x); coords.add(i);

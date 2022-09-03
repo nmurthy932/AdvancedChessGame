@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Pawn extends Piece{
 
-	public static final int value = 1;
+	public static final int value = 100;
 	public static ArrayList<ArrayList<Integer>> getMoves(char piece, int x, int y, String state) {
 		ArrayList<ArrayList<Integer>> legalMoves = new ArrayList<ArrayList<Integer>>();
 		if(piece == 'P') {
